@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="ProfesionEditDlg" widgetVar="ProfesionEditDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{bundle.EditProfesionTitle}" closeOnEscape="true">
+
+            <h:form id="ProfesionEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{profesionController.selected != null}">
+
+
+                        <h:outputLabel value="#{bundle.EditProfesionLabel_id}" for="id" />
+                        <h:outputText id="id" value="#{profesionController.selected.id}" />
+
+                        <p:outputLabel value="#{bundle.EditProfesionLabel_codigo}" for="codigo" />
+                        <p:inputText id="codigo" value="#{profesionController.selected.codigo}" title="#{bundle.EditProfesionTitle_codigo}" required="true" requiredMessage="#{bundle.EditProfesionRequiredMessage_codigo}" size="20" maxlength="20"/>
+
+                        <p:outputLabel value="#{bundle.EditProfesionLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{profesionController.selected.descripcion}" title="#{bundle.EditProfesionTitle_descripcion}" required="true" requiredMessage="#{bundle.EditProfesionRequiredMessage_descripcion}" size="200" maxlength="200"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{profesionController.save}" value="#{bundle.Save}" update="display,:ProfesionListForm:datalist,:ProfesionListForm:ProfesionDataTableContextMenu,:growl" oncomplete="handleSubmit(xhr,status,args,PF('ProfesionEditDialog'));">
+                        <p:confirm header="#{bundle.ConfirmationHeader}" message="#{bundle.ConfirmEditMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{bundle.Cancel}" oncomplete="PF('ProfesionEditDialog').hide()" update="display" process="@this" immediate="true" resetValues="true"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
