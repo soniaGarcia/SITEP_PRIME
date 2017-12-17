@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="DireccionCreatePage" lazy="true">
+        <pm:header title="#{bundle.CreateDireccionTitle}">
+            <h:form>
+                <p:commandButton styleClass="ui-btn-left ui-btn-inline" value="#{bundle.Cancel}" icon="ui-icon-arrow-l" action="#{mobilePageController.navigateBackInHistory('pm:DireccionListPage')}"/>
+            </h:form>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="DireccionCreateForm">
+
+                <h:panelGroup id="display" rendered="#{direccionController.selected != null}">
+                    <p:outputPanel>
+
+                        <pm:field>
+                            <p:outputLabel value="#{bundle.CreateDireccionLabel_id}" for="id" />
+                            <p:inputText id="id" value="#{direccionController.selected.id}" title="#{bundle.CreateDireccionTitle_id}" required="true" requiredMessage="#{bundle.CreateDireccionRequiredMessage_id}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{bundle.CreateDireccionLabel_colonia}" for="colonia" />
+                            <p:inputText id="colonia" value="#{direccionController.selected.colonia}" title="#{bundle.CreateDireccionTitle_colonia}" size="200" maxlength="200"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{bundle.CreateDireccionLabel_calle}" for="calle" />
+                            <p:inputText id="calle" value="#{direccionController.selected.calle}" title="#{bundle.CreateDireccionTitle_calle}" size="200" maxlength="200"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{bundle.CreateDireccionLabel_casa}" for="casa" />
+                            <p:inputText id="casa" value="#{direccionController.selected.casa}" title="#{bundle.CreateDireccionTitle_casa}" size="200" maxlength="200"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{bundle.CreateDireccionLabel_clienteId}" for="clienteId" />
+                            <p:selectOneMenu id="clienteId" value="#{direccionController.selected.clienteId}" required="true" requiredMessage="#{bundle.CreateDireccionRequiredMessage_clienteId}" converter="clienteConverter">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{clienteController.items}"
+                                               var="clienteIdItem"
+                                               itemValue="#{clienteIdItem}"
+                                               itemLabel="#{clienteIdItem.id.toString()}"
+                                               />
+
+                            </p:selectOneMenu>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{bundle.CreateDireccionLabel_departamentoId}" for="departamentoId" />
+                            <p:selectOneMenu id="departamentoId" value="#{direccionController.selected.departamentoId}" required="true" requiredMessage="#{bundle.CreateDireccionRequiredMessage_departamentoId}" converter="departamentoConverter">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{departamentoController.items}"
+                                               var="departamentoIdItem"
+                                               itemValue="#{departamentoIdItem}"
+                                               itemLabel="#{departamentoIdItem.descripcion.toString()}"
+                                               />
+
+                            </p:selectOneMenu>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{bundle.CreateDireccionLabel_municipioId}" for="municipioId" />
+                            <p:selectOneMenu id="municipioId" value="#{direccionController.selected.municipioId}" required="true" requiredMessage="#{bundle.CreateDireccionRequiredMessage_municipioId}" converter="municipioConverter">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{municipioController.items}"
+                                               var="municipioIdItem"
+                                               itemValue="#{municipioIdItem}"
+                                               itemLabel="#{municipioIdItem.descripcion.toString()}"
+                                               />
+
+                            </p:selectOneMenu>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{bundle.CreateDireccionLabel_paisId}" for="paisId" />
+                            <p:selectOneMenu id="paisId" value="#{direccionController.selected.paisId}" required="true" requiredMessage="#{bundle.CreateDireccionRequiredMessage_paisId}" converter="paisConverter">
+                                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{paisController.items}"
+                                               var="paisIdItem"
+                                               itemValue="#{paisIdItem}"
+                                               itemLabel="#{paisIdItem.descripcion.toString()}"
+                                               />
+
+                            </p:selectOneMenu>
+                        </pm:field>
+                    </p:outputPanel>
+                    <p:commandButton actionListener="#{direccionController.saveNew}" value="#{bundle.Save}" update="display,:DireccionListPage:DireccionListForm:datalist,:growl" action="#{mobilePageController.navigateWithHistory('pm:DireccionListPage')}"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>

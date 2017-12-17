@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="DireccionListForm">
+
+        <p:panel header="#{bundle.ListDireccionTitle}">
+            <p:contextMenu id="DireccionDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{bundle.Create}" onclick="document.getElementById('DireccionListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{bundle.View}" onclick="document.getElementById('DireccionListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{bundle.Edit}" onclick="document.getElementById('DireccionListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{bundle.Delete}" onclick="document.getElementById('DireccionListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{bundle.DireccionMenuItem_clienteId}" icon="ui-icon-search"  actionListener="#{direccionController.prepareClienteId}" update=":ClienteViewForm" oncomplete="PF('ClienteViewDialog').show()" disabled="#{empty direccionController.selected.clienteId}"/>  
+                <p:menuitem value="#{bundle.DireccionMenuItem_departamentoId}" icon="ui-icon-search"  actionListener="#{direccionController.prepareDepartamentoId}" update=":DepartamentoViewForm" oncomplete="PF('DepartamentoViewDialog').show()" disabled="#{empty direccionController.selected.departamentoId}"/>  
+                <p:menuitem value="#{bundle.DireccionMenuItem_municipioId}" icon="ui-icon-search"  actionListener="#{direccionController.prepareMunicipioId}" update=":MunicipioViewForm" oncomplete="PF('MunicipioViewDialog').show()" disabled="#{empty direccionController.selected.municipioId}"/>  
+                <p:menuitem value="#{bundle.DireccionMenuItem_paisId}" icon="ui-icon-search"  actionListener="#{direccionController.preparePaisId}" update=":PaisViewForm" oncomplete="PF('PaisViewDialog').show()" disabled="#{empty direccionController.selected.paisId}"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{direccionController.lazyItems}"
+                         lazy="true"
+                         var="item"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{direccionController.selected}"
+                         filteredValue="#{direccionController.filteredItems}">
+                <!--
+                         To disable Lazy Loading, please copy/replace the following lines above,
+                         and be sure to replace the word HASH with the # symbol:
+                
+                         value="HASH{direccionController.items}"
+                         lazy="false"
+                         rowKey="HASH{item.id}"
+                -->
+
+
+                <p:ajax event="rowSelect"   update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:DireccionDataTableContextMenu" listener="#{direccionController.resetParents}"/>
+                <p:ajax event="rowUnselect" update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:DireccionDataTableContextMenu" listener="#{direccionController.resetParents}"/>
+                <p:ajax event="contextMenu" update="@form:createButton @form:viewButton @form:editButton @form:deleteButton" listener="#{direccionController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('DireccionListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.id}" filterBy="#{item.id}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListDireccionTitle_id}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.colonia}" filterBy="#{item.colonia}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListDireccionTitle_colonia}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.colonia}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.calle}" filterBy="#{item.calle}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListDireccionTitle_calle}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.calle}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.casa}" filterBy="#{item.casa}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListDireccionTitle_casa}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.casa}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.clienteId.id}" filterBy="#{item.clienteId.id}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListDireccionTitle_clienteId}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.clienteId.id}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.departamentoId.descripcion}" filterBy="#{item.departamentoId.descripcion}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListDireccionTitle_departamentoId}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.departamentoId.descripcion}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.municipioId.descripcion}" filterBy="#{item.municipioId.descripcion}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListDireccionTitle_municipioId}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.municipioId.descripcion}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.paisId.descripcion}" filterBy="#{item.paisId.descripcion}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListDireccionTitle_paisId}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.paisId.descripcion}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{direccionController.prepareCreate}" update=":DireccionCreateForm" oncomplete="PF('DireccionCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{bundle.View}" update=":DireccionViewForm" oncomplete="PF('DireccionViewDialog').show()" disabled="#{empty direccionController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{bundle.Edit}" update=":DireccionEditForm" oncomplete="PF('DireccionEditDialog').show()" disabled="#{empty direccionController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{direccionController.delete}" update=":growl,datalist" disabled="#{empty direccionController.selected}">
+                <p:confirm header="#{bundle.ConfirmationHeader}" message="#{bundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/WEB-INF/include/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

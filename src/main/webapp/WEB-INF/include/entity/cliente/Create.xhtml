@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ClienteCreateDlg" widgetVar="ClienteCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateClienteTitle}" closeOnEscape="true">
+
+            <h:form id="ClienteCreateForm">
+
+                <h:panelGroup id="display" rendered="#{clienteController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{bundle.CreateClienteLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{clienteController.selected.id}" title="#{bundle.CreateClienteTitle_id}" required="true" requiredMessage="#{bundle.CreateClienteRequiredMessage_id}"/>
+
+                        <p:outputLabel value="#{bundle.CreateClienteLabel_nombres}" for="nombres" />
+                        <p:inputText id="nombres" value="#{clienteController.selected.nombres}" title="#{bundle.CreateClienteTitle_nombres}" required="true" requiredMessage="#{bundle.CreateClienteRequiredMessage_nombres}" size="200" maxlength="200"/>
+
+                        <p:outputLabel value="#{bundle.CreateClienteLabel_apellidos}" for="apellidos" />
+                        <p:inputText id="apellidos" value="#{clienteController.selected.apellidos}" title="#{bundle.CreateClienteTitle_apellidos}" required="true" requiredMessage="#{bundle.CreateClienteRequiredMessage_apellidos}" size="200" maxlength="200"/>
+
+                        <p:outputLabel value="#{bundle.CreateClienteLabel_dui}" for="dui" />
+                        <p:inputText id="dui" value="#{clienteController.selected.dui}" title="#{bundle.CreateClienteTitle_dui}" size="10" maxlength="10"/>
+
+                        <p:outputLabel value="#{bundle.CreateClienteLabel_nit}" for="nit" />
+                        <p:inputText id="nit" value="#{clienteController.selected.nit}" title="#{bundle.CreateClienteTitle_nit}" size="14" maxlength="14"/>
+
+                        <p:outputLabel value="#{bundle.CreateClienteLabel_profesionId}" for="profesionId" />
+                        <p:selectOneMenu id="profesionId" value="#{clienteController.selected.profesionId}"  converter="profesionConverter">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{profesionController.items}"
+                                           var="profesionIdItem"
+                                           itemValue="#{profesionIdItem}"
+                                           itemLabel="#{profesionIdItem.descripcion.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{clienteController.saveNew}" value="#{bundle.Save}" update="display,:ClienteListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('ClienteCreateDialog'));">
+                        <p:confirm header="#{bundle.ConfirmationHeader}" message="#{bundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{bundle.Cancel}" oncomplete="PF('ClienteCreateDialog').hide()" update="display" process="@this" immediate="true" resetValues="true"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

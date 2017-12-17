@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="DepartamentoViewPage" lazy="true">
+        <pm:header title="#{bundle.ViewDepartamentoTitle}">
+            <h:form>
+                <p:commandButton styleClass="ui-btn-left ui-btn-inline" value="#{bundle.Cancel}" icon="ui-icon-arrow-l" action="#{mobilePageController.navigateBackInHistory('pm:DepartamentoListPage')}"/>
+            </h:form>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="DepartamentoViewForm">
+
+                <h:panelGroup id="display">
+                    <p:outputPanel rendered="#{departamentoController.selected != null}">
+
+                        <pm:field>
+                            <h:outputText value="#{bundle.ViewDepartamentoLabel_id}"/>
+                            <h:outputText value="#{departamentoController.selected.id}" title="#{bundle.ViewDepartamentoTitle_id}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{bundle.ViewDepartamentoLabel_codigo}"/>
+                            <h:outputText value="#{departamentoController.selected.codigo}" title="#{bundle.ViewDepartamentoTitle_codigo}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{bundle.ViewDepartamentoLabel_descripcion}"/>
+                            <h:outputText value="#{departamentoController.selected.descripcion}" title="#{bundle.ViewDepartamentoTitle_descripcion}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{bundle.ViewDepartamentoLabel_paisId}"/>
+                            <h:outputText value="#{departamentoController.selected.paisId.descripcion}"/>
+                        </pm:field>
+                    </p:outputPanel>
+                </h:panelGroup>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>
