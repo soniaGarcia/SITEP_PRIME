@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <ui:composition>
+        <h:form id="paisToolbar" prependId="false">
+            <p:toolbar>
+                <f:facet name="left">
+                    <p:commandButton value="Nuevo" title="Nuevo" icon="fa fa-plus" actionListener="#{paisView.prepareNew}" process="@form" update="paisDetail" oncomplete="PF('paisDialog').show()"/>
+                </f:facet>
+            </p:toolbar>
+        </h:form>
+         <h:form id="paisMenuContext" prependId="false">
+            <p:contextMenu for="paisList">
+                <p:menuitem value="Editar" icon="ui-icon-pencil" actionListener="#{paisView.prepareEdit}" process="@form" update="paisDetail" oncomplete="PF('paisDialog').show()" />
+                <p:menuitem value="Eliminar"  icon="ui-icon-trash" process="@form" update="paisList" actionListener="#{paisView.delete}" />
+                <p:menuitem value="Ver Detalle" icon="ui-icon-search" actionListener="#{paisView.prepareView}" process="@form" update="paisViewDetail" />
+            </p:contextMenu>     
+            <p:dataTable var="item" value="#{paisView.lazyModel}" paginator="true" rows="10"
+                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                     rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{paisView.selectedItem}" id="paisList" lazy="true">
+
+                <p:column headerText="ID" sortBy="#{item.ID}" filterBy="#{item.ID}">
+                   <h:outputText value="#{item.ID}" />
+                </p:column>
+
+                <p:column headerText="CODIGO" sortBy="#{item.CODIGO}" filterBy="#{item.CODIGO}">
+                   <h:outputText value="#{item.CODIGO}" />
+                </p:column>
+
+                <p:column headerText="DESCRIPCION" sortBy="#{item.DESCRIPCION}" filterBy="#{item.DESCRIPCION}">
+                   <h:outputText value="#{item.DESCRIPCION}" />
+                </p:column>
+
+                <p:column headerText="MONEDA" sortBy="#{item.MONEDA}" filterBy="#{item.MONEDA}">
+                   <h:outputText value="#{item.MONEDA}" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Registro de pais" widgetVar="paisDialog" appendTo="@(body)" modal="true" showEffect="fade" hideEffect="fade" resizable="false" minimizable="true" maximizable="true" position="center">
+            <p:outputPanel id="paisDetail" >
+                <p:messages id="paisMessages" showDetail="true" autoUpdate="true" closable="true" />
+
+                <p:outputPanel id="paisNewDetail" style="text-align:center;max-height:900px;overflow:auto" rendered="#{not empty paisView.selectedItem and (paisView.status.description=='NEW' || paisView.status.description=='EDIT')}" >
+                    <h:form id="paisNewForm" prependId="false">
+                        <p:panelGrid columns="2" columnClasses="label,value">
+
+                            <h:outputLabel for="in_id" value="ID:" />
+                            <h:inputText id="in_id" value="#{paisView.selectedItem.ID}" />
+
+                            <h:outputLabel for="in_codigo" value="CODIGO:" />
+                            <h:inputText id="in_codigo" value="#{paisView.selectedItem.CODIGO}" />
+
+                            <h:outputLabel for="in_descripcion" value="DESCRIPCION:" />
+                            <h:inputText id="in_descripcion" value="#{paisView.selectedItem.DESCRIPCION}" />
+
+                            <h:outputLabel for="in_moneda" value="MONEDA:" />
+                            <h:inputText id="in_moneda" value="#{paisView.selectedItem.MONEDA}" />
+
+                            <br />
+                            <h:panelGrid columns="2">
+                                <p:commandButton styleClass="ui-priority-primary" value="Guardar" title="Guardar" icon="fa fa-fw fa-save" actionListener="#{paisView.save}" process="@form" update="@form, paisMessages, paisDetail, paisList"  oncomplete="handleSubmit(xhr,status,args,'paisDialog');" />
+                                <p:commandButton value="Cancelar" title="Cancelar" icon="fa fa-fw fa-rotate-left" onclick="PF('paisDialog').hide();" />
+                            </h:panelGrid>
+                        </p:panelGrid>
+                    </h:form>
+                </p:outputPanel>
+            </p:outputPanel>
+        </p:dialog>
+        <p:panel id="paisViewDetail" header="Detalle de PAIS">
+            <p:outputPanel  rendered="#{paisView.status.description=='VIEW' and (not empty paisView.selectedItem)}">
+
+                <p:tabView dynamic="true" cache="true" id="paisTabDetail" prependId="false">
+                
+                    <p:tab title="DIRECCION">
+                        <!-- TODO: <ui:include src="../direccion/list.xhtml" /> -->
+                        TODO: descomentar include hacia "../direccion/list.xhtml"
+                    </p:tab>
+                
+                    <p:tab title="DEPARTAMENTO">
+                        <!-- TODO: <ui:include src="../departamento/list.xhtml" /> -->
+                        TODO: descomentar include hacia "../departamento/list.xhtml"
+                    </p:tab>
+
+
+
+                </p:tabView>
+            </p:outputPanel>
+        </p:panel>
+    </ui:composition>    
+</html>

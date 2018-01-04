@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:composition>
+        <h:form id="departamentoToolbar" prependId="false">
+            <p:toolbar>
+                <f:facet name="left">
+                    <p:commandButton value="Nuevo" title="Nuevo" icon="fa fa-plus" actionListener="#{departamentoView.prepareNew}" process="@form" update="departamentoDetail" oncomplete="PF('departamentoDialog').show()"/>
+                </f:facet>
+            </p:toolbar>
+        </h:form>
+        <h:form id="departamentoMenuContext" prependId="false">
+            <p:contextMenu for="departamentoList">
+                <p:menuitem value="Editar" icon="ui-icon-pencil" actionListener="#{departamentoView.prepareEdit}" process="@form" update="departamentoDetail" oncomplete="PF('departamentoDialog').show()" />
+                <p:menuitem value="Eliminar"  icon="ui-icon-trash" process="@form" update="departamentoList" actionListener="#{departamentoView.delete}" />
+                <p:menuitem value="Ver Detalle" icon="ui-icon-search" actionListener="#{departamentoView.prepareView}" process="@form" update="departamentoViewDetail" />
+            </p:contextMenu>     
+            <p:dataTable var="item" value="#{departamentoView.lazyModel}" paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{departamentoView.selectedItem}" id="departamentoList" lazy="true">
+
+                <p:column headerText="ID" sortBy="#{item.id}" filterBy="#{item.id}">
+                    <h:outputText value="#{item.id}" />
+                </p:column>
+
+                <p:column headerText="CODIGO" sortBy="#{item.codigo}" filterBy="#{item.codigo}">
+                    <h:outputText value="#{item.codigo}" />
+                </p:column>
+
+                <p:column headerText="DESCRIPCION" sortBy="#{item.descripcion}" filterBy="#{item.descripcion}">
+                    <h:outputText value="#{item.descripcion}" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Registro de departamento" widgetVar="departamentoDialog" appendTo="@(body)" modal="true" showEffect="fade" hideEffect="fade" resizable="false" minimizable="true" maximizable="true" position="center">
+            <p:outputPanel id="departamentoDetail" >
+                <p:messages id="departamentoMessages" showDetail="true" autoUpdate="true" closable="true" />
+
+                <p:outputPanel id="departamentoNewDetail" style="text-align:center;max-height:900px;overflow:auto" rendered="#{not empty departamentoView.selectedItem and (departamentoView.status.description=='NEW' || departamentoView.status.description=='EDIT')}" >
+                    <h:form id="departamentoNewForm" prependId="false">
+                        <p:panelGrid columns="2" columnClasses="label,value">
+
+                            <h:outputLabel for="in_id" value="ID:" rendered="#{1 ne departamentoView.status.code}"/>
+                            <h:inputText id="in_id" value="#{departamentoView.selectedItem.id}"  rendered="#{1 ne departamentoView.status.code}"/>
+                            <h:outputLabel for="in_codigo" value="CODIGO:" />
+                            <h:inputText id="in_codigo" value="#{departamentoView.selectedItem.codigo}" />
+
+                            <h:outputLabel for="in_descripcion" value="DESCRIPCION:" />
+                            <h:inputText id="in_descripcion" value="#{departamentoView.selectedItem.descripcion}" />
+
+                            <p:outputLabel value="PAIS:" for="paisId" />
+                            <p:selectOneMenu id="paisId" value="#{departamentoView.selectedItem.paisId}">
+                                <f:selectItem itemLabel="Seleccione Uno"/>
+                                <f:selectItems value="#{departamentoView.paises}"
+                                               var="paisIdItem"
+                                               itemValue="#{paisIdItem}"
+                                               itemLabel="#{paisIdItem.descripcion}"
+                                               />
+                                <f:converter converterId="jsfUniversalConverter" />
+                            </p:selectOneMenu>
+
+                            <br />
+                            <h:panelGrid columns="2">
+                                <p:commandButton styleClass="ui-priority-primary" value="Guardar" title="Guardar" icon="fa fa-fw fa-save" actionListener="#{departamentoView.save}" process="@form" update="@form, departamentoMessages, departamentoDetail, departamentoList"  oncomplete="handleSubmit(xhr,status,args,'departamentoDialog');" />
+                                <p:commandButton value="Cancelar" title="Cancelar" icon="fa fa-fw fa-rotate-left" onclick="PF('departamentoDialog').hide();" />
+                            </h:panelGrid>
+                        </p:panelGrid>
+                    </h:form>
+                </p:outputPanel>
+            </p:outputPanel>
+        </p:dialog>
+        <p:panel id="departamentoViewDetail" header="Detalle de DEPARTAMENTO">
+            <p:outputPanel  rendered="#{departamentoView.status.description=='VIEW' and (not empty departamentoView.selectedItem)}">
+
+                <p:tabView dynamic="true" cache="true" id="departamentoTabDetail" prependId="false">
+
+                    <p:tab title="MUNICIPIO">
+                        <ui:include src="../municipio/list.xhtml" /> 
+                        <!--TODO: descomentar include hacia "../municipio/list.xhtml"-->
+                    </p:tab>
+
+                    <p:tab title="DIRECCION">
+                        <!-- TODO: <ui:include src="../direccion/list.xhtml" /> -->
+                        TODO: descomentar include hacia "../direccion/list.xhtml"
+                    </p:tab>
+
+
+
+
+
+                </p:tabView>
+            </p:outputPanel>
+        </p:panel>
+    </ui:composition>    
+</html>

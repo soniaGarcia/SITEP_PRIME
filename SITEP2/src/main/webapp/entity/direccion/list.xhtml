@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <ui:composition>
+        <h:form id="direccionToolbar" prependId="false">
+            <p:toolbar>
+                <f:facet name="left">
+                    <p:commandButton value="Nuevo" title="Nuevo" icon="fa fa-plus" actionListener="#{direccionView.prepareNew}" process="@form" update="direccionDetail" oncomplete="PF('direccionDialog').show()"/>
+                </f:facet>
+            </p:toolbar>
+        </h:form>
+         <h:form id="direccionMenuContext" prependId="false">
+            <p:contextMenu for="direccionList">
+                <p:menuitem value="Editar" icon="ui-icon-pencil" actionListener="#{direccionView.prepareEdit}" process="@form" update="direccionDetail" oncomplete="PF('direccionDialog').show()" />
+                <p:menuitem value="Eliminar"  icon="ui-icon-trash" process="@form" update="direccionList" actionListener="#{direccionView.delete}" />
+                <p:menuitem value="Ver Detalle" icon="ui-icon-search" actionListener="#{direccionView.prepareView}" process="@form" update="direccionViewDetail" />
+            </p:contextMenu>     
+            <p:dataTable var="item" value="#{direccionView.lazyModel}" paginator="true" rows="10"
+                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                     rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{direccionView.selectedItem}" id="direccionList" lazy="true">
+
+                <p:column headerText="ID" sortBy="#{item.ID}" filterBy="#{item.ID}">
+                   <h:outputText value="#{item.ID}" />
+                </p:column>
+
+                <p:column headerText="COLONIA" sortBy="#{item.COLONIA}" filterBy="#{item.COLONIA}">
+                   <h:outputText value="#{item.COLONIA}" />
+                </p:column>
+
+                <p:column headerText="CALLE" sortBy="#{item.CALLE}" filterBy="#{item.CALLE}">
+                   <h:outputText value="#{item.CALLE}" />
+                </p:column>
+
+                <p:column headerText="CASA" sortBy="#{item.CASA}" filterBy="#{item.CASA}">
+                   <h:outputText value="#{item.CASA}" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Registro de direccion" widgetVar="direccionDialog" appendTo="@(body)" modal="true" showEffect="fade" hideEffect="fade" resizable="false" minimizable="true" maximizable="true" position="center">
+            <p:outputPanel id="direccionDetail" >
+                <p:messages id="direccionMessages" showDetail="true" autoUpdate="true" closable="true" />
+
+                <p:outputPanel id="direccionNewDetail" style="text-align:center;max-height:900px;overflow:auto" rendered="#{not empty direccionView.selectedItem and (direccionView.status.description=='NEW' || direccionView.status.description=='EDIT')}" >
+                    <h:form id="direccionNewForm" prependId="false">
+                        <p:panelGrid columns="2" columnClasses="label,value">
+
+                            <h:outputLabel for="in_id" value="ID:" />
+                            <h:inputText id="in_id" value="#{direccionView.selectedItem.ID}" />
+
+                            <h:outputLabel for="in_colonia" value="COLONIA:" />
+                            <h:inputText id="in_colonia" value="#{direccionView.selectedItem.COLONIA}" />
+
+                            <h:outputLabel for="in_calle" value="CALLE:" />
+                            <h:inputText id="in_calle" value="#{direccionView.selectedItem.CALLE}" />
+
+                            <h:outputLabel for="in_casa" value="CASA:" />
+                            <h:inputText id="in_casa" value="#{direccionView.selectedItem.CASA}" />
+
+                            <br />
+                            <h:panelGrid columns="2">
+                                <p:commandButton styleClass="ui-priority-primary" value="Guardar" title="Guardar" icon="fa fa-fw fa-save" actionListener="#{direccionView.save}" process="@form" update="@form, direccionMessages, direccionDetail, direccionList"  oncomplete="handleSubmit(xhr,status,args,'direccionDialog');" />
+                                <p:commandButton value="Cancelar" title="Cancelar" icon="fa fa-fw fa-rotate-left" onclick="PF('direccionDialog').hide();" />
+                            </h:panelGrid>
+                        </p:panelGrid>
+                    </h:form>
+                </p:outputPanel>
+            </p:outputPanel>
+        </p:dialog>
+        <p:panel id="direccionViewDetail" header="Detalle de DIRECCION">
+            <p:outputPanel  rendered="#{direccionView.status.description=='VIEW' and (not empty direccionView.selectedItem)}">
+
+                <p:tabView dynamic="true" cache="true" id="direccionTabDetail" prependId="false">
+
+
+
+
+                </p:tabView>
+            </p:outputPanel>
+        </p:panel>
+    </ui:composition>    
+</html>

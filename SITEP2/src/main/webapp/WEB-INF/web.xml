@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+       <servlet>
+        <servlet-name>facesServlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>facesServlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>adamantium</param-value>
+    </context-param>
+    
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Public Area</web-resource-name>
+            <url-pattern>/javax.faces.resource/*</url-pattern>
+            <url-pattern>/auth/login.xhtml</url-pattern>
+            <url-pattern>/auth/forgotPassword.xhtml</url-pattern>
+            <url-pattern>/auth/emailSuccess.xhtml</url-pattern>
+            <url-pattern>/auth/changePassword.xhtml</url-pattern>
+            <url-pattern>/auth/lastConnection.xhtml</url-pattern>
+            <url-pattern>/errors/*</url-pattern> 
+            <url-pattern>/auth/passwordExpireWarning.xhtml</url-pattern> 
+            <url-pattern>/auth/useTerms.xhtml</url-pattern>
+        </web-resource-collection>
+
+        <web-resource-collection>
+            <web-resource-name>Resources</web-resource-name>
+            <url-pattern>/resources/*</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+    
+    <error-page>
+        <error-code>403</error-code>
+        <location>/errors/access-denied.xhtml</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errors/404.xhtml</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/errors/error.xhtml</location>
+    </error-page>
+    
+     <error-page>
+        <error-code>503</error-code>
+        <location>/errors/error.xhtml</location>
+    </error-page>
+    
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/errors/expired.xhtml</location>
+    </error-page>
+</web-app>

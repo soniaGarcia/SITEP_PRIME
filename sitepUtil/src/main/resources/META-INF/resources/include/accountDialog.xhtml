@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition>
+        <div class="showmebaby" style="display: none;">
+            <p:dialog id="accountDialog" header="#{sitepCommonBundle.accountDialogHeader}" 
+                      widgetVar="accountDlg" width="570" height="300" modal="true" responsive="true">
+                <h:form id="accountForm" prependId="false">
+                    <p:panelGrid id="perfilGrid" columns="2" style="border:0px;">
+                        <p:outputLabel for="settingperfil" value="Perfil:" />
+                        <p:inputText id="settingperfil" readonly="true" value="#{segDefaultSetting.perfil}" style="width:405px"/>
+
+                        <p:outputLabel value="Instituci&#243;n:" />
+                        <p:selectOneMenu id="settinginstituciones" value="#{segDefaultSetting.selectedInstitucion}" style="width:350px" effect="fold"  filter="true" filterMatchMode="contains">
+                            <p:ajax listener="#{segDefaultSetting.onChangeInstitution}" update="settingufis settingues settingurhis" process="@this" />
+                            <f:selectItems value="#{segDefaultSetting.instituciones}" var="item" itemLabel="#{item.codigo} - #{item.descripcion}" />
+                            <f:converter converterId="jsfUniversalConverter" />
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Unidades Financieras (UFI):" />
+                        <p:selectOneMenu id="settingufis" value="#{segDefaultSetting.selectedUfi}" style="width:350px" effect="fold"  filter="true" filterMatchMode="contains">
+                            <p:ajax listener="#{segDefaultSetting.onChangeUfi}" update="settingues" process="@this" />
+                            <f:selectItem itemLabel="NINGUNA" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{segDefaultSetting.assignmentsUfis}" var="item" itemLabel="#{item.codigo} - #{item.descripcion}" />
+                            <f:converter converterId="jsfUniversalConverter" />
+                        </p:selectOneMenu>                        
+
+                        <p:outputLabel value="Unidades Ejecutoras (UE):" />
+                        <p:selectOneMenu id="settingues" value="#{segDefaultSetting.selectedUe}" style="width:350px" effect="fold"  filter="true" filterMatchMode="contains">
+                            <p:ajax  listener="#{segDefaultSetting.onChangeUe}" />
+                            <f:selectItem itemLabel="NINGUNA" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{segDefaultSetting.assignmentsUes}" var="item" itemLabel="#{item.codigo} - #{item.descripcion}" />
+                            <f:converter converterId="jsfUniversalConverter" />
+                        </p:selectOneMenu>
+                                                
+                        <p:outputLabel value="Unidades de Recuros Humanos (URHI):" />
+                        <p:selectOneMenu id="settingurhis" value="#{segDefaultSetting.selectedUrhi}" style="width:350px" effect="fold"  filter="true" filterMatchMode="contains">
+                            <p:ajax listener="#{segDefaultSetting.onChangeUrhi}" process="@this" />
+                            <f:selectItem itemLabel="NINGUNA" noSelectionOption="true" />
+                            <f:selectItems value="#{segDefaultSetting.assignmentsUrhis}" var="item" itemLabel="#{item.codigo} - #{item.descripcion}" />
+                            <f:converter converterId="jsfUniversalConverter" />
+                        </p:selectOneMenu>                           
+                        
+                    </p:panelGrid>
+                </h:form>
+                <f:facet name="footer">
+                    <p:outputPanel layout="block">
+                        <p:commandButton value="Cerrar" onclick="PF('accountDlg').hide();" />
+                    </p:outputPanel>
+                </f:facet>
+            </p:dialog>
+            
+            
+            <p:dialog id="sessionDialog" header="#{sitepCommonBundle.sessionDialogHeader}" 
+                      widgetVar="sessionDlg" width="600" height="525" modal="true" responsive="true">
+                <h:form id="sessionForm" prependId="false">
+                        <p:dataTable id="sessionTable" 
+                                     widgetVar="wvSessionTable"
+                                     value="#{segDefaultSetting.listSessions}" var="itemSession"   
+                                     rowKey="#{itemSession.id}" 
+                                     emptyMessage="-"
+                                     paginator="false" 
+                                     rows="10" 
+                                     paginatorPosition="bottom" 
+                                     rowsPerPageTemplate="10,20,30,40,50"> 
+                            <f:facet name="header">
+                                Mostrando las últimas (10) conexiones
+                            </f:facet>
+                            <p:column filterBy="#{of:formatDate(itemSession.fecha,'dd-MM-yyyy HH:mm:ss')}" headerText="Fecha">
+                                #{of:formatDate(itemSession.fecha,'dd-MM-yyyy HH:mm:ss')}
+                            </p:column>
+                            <p:column filterBy="#{itemSession.tipo}" headerText="Tipo">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('wvSessionTable').filter()" >
+                                        <f:selectItem itemLabel="Seleccione uno" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItem itemLabel="Entradas" itemValue="SUCCESSFUL_ENTRY" />
+                                        <f:selectItem itemLabel="Salidas" itemValue="SUCCESSFUL_EXIT"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                               #{itemSession.tipo.code == 1 ? 'Inicio de conexión' : 'Fin de conexión'}
+                            </p:column>
+                        </p:dataTable>
+                </h:form>
+                <f:facet name="footer">
+                    <p:outputPanel layout="block">
+                        <p:commandButton value="Cerrar" onclick="PF('sessionDlg').hide();" />
+                    </p:outputPanel>
+                </f:facet>
+            </p:dialog>
+        </div>
+
+    </ui:composition>
+
+</html>

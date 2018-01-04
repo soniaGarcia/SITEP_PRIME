@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+     <converter>
+        <description>jsfUniversalConverter</description>
+        <converter-id>jsfUniversalConverter</converter-id>
+        <converter-class>sv.gob.mh.siteputil.util.jsf.JsfUniversalConverter</converter-class>
+    </converter>
+    
+    <converter>
+        <description>bigDecimalConverter</description>
+        <converter-id>bigDecimalConverter</converter-id>
+        <converter-class>sv.gob.mh.siteputil.util.jsf.BigDecimalConverter</converter-class>
+    </converter>
+    
+    <converter>
+        <description>bigDecimalUniversalConverter</description>
+        <converter-id>bigDecimalUniversalConverter</converter-id>
+        <converter-class>sv.gob.mh.siteputil.util.jsf.BigDecimalUniversalConverter</converter-class>
+    </converter>
+    
+</faces-config>

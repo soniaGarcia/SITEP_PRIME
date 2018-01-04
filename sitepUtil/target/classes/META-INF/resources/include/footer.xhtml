@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <div class="showmebaby" style="display: none;">
+            <p:toolbar style="overflow: hidden;">
+                <p:toolbarGroup align="left">
+                    <p:graphicImage library="images" name="sitep/house.png"
+                                    alt="#{sitepCommonBundle.ministry}" />
+                </p:toolbarGroup>
+
+                <p:toolbarGroup align="center">
+                    <h:outputText value="#{sitepCommonBundle.ministry} #{sitepCommonBundle.copyright}"
+                                  style="color:black" />
+                    <br/>
+                    <h:outputText value="Versi&oacute;n: @@SITEP_BUILD_NUMBER@@"
+                                  style="color:black; font-size: 10px;" />
+                    <br/>
+                    <h:outputText value="@@SITEP_BUILD_ID@@"
+                                  style="color:black; font-size: 8px;" />
+                </p:toolbarGroup>
+
+                <p:toolbarGroup align="right">
+
+                </p:toolbarGroup>
+            </p:toolbar>
+        </div>
+    </ui:composition>
+</html>

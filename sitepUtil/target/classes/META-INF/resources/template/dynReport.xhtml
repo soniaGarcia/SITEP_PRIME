@@ -1,0 +1,294 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/baseLayout.xhtml"
+                xmlns:sitep="http://www.mh.gob.sv.org/dinafi/jsf/sitep">
+
+
+    <ui:define name="head">
+    </ui:define>
+
+    <ui:define name="subheader">
+        <h:outputText value="#{sitepCommonBundle.AppName}"></h:outputText>
+    </ui:define>
+
+    <ui:define name="mainContent">
+        <h:outputStylesheet library="css" name="dynreports.css" />
+        <h:form id="contentForm" prependId="false">
+            <p:outputPanel id="params_section">
+                <ui:insert name="documentmodelBody" />
+            </p:outputPanel>
+
+            <ui:param name="isScratch" value="#{containerView.selectedView.report==null or containerView.selectedView.report.reportName==null or containerView.selectedView.report.reportName.trim() eq '' or containerView.selectedView.report.id==null}" />
+            <ui:param name="isReportSelected" value="#{containerView.selectedView.report!=null and containerView.selectedView.report.reportName!=null and not('' eq containerView.selectedView.report.reportName.trim())}" />
+            <ui:param name="widthCriteria" value="100" />
+            <ui:param name="widthParams" value="#{containerView.selectedView.report.additionalColumnsSet!=null and containerView.selectedView.report.additionalColumnsSet.size()>0?'33':'50'}" />
+            <ui:param name="widthStages" value="#{containerView.selectedView.report.additionalColumnsSet!=null and containerView.selectedView.report.additionalColumnsSet.size()>0?'33':'50'}" />
+            <ui:param name="widthAdditionalColumns" value="#{containerView.selectedView.report.additionalColumnsSet!=null and containerView.selectedView.report.additionalColumnsSet.size()>0?'33':'33'}" />
+            <p:outputPanel id="toolbar_section">
+                <p:tabMenu id="static-menu" activeIndex="#{containerView.selectedTab}">
+                    <ui:insert name="tabsDefinition" />
+                </p:tabMenu>
+                <p:toolbar id="dyn_reports_tb" rendered="#{containerView.selectedView!=null}">
+                    <f:facet name="left">
+                        <p:commandButton icon="fa fa-key" value="Abrir" styleClass="OrangeButton White" actionListener="#{containerView.selectedView.load}" update="openDynamicReportDialogForm" oncomplete="PF('openDynamicReportDialog').show()" />
+                        <p:commandButton icon="fa fa-database" value="Nuevo" styleClass="GreenButton White" actionListener="#{containerView.selectedView.prepareCreate}" update="newDynamicReportDialogForm" oncomplete="PF('newDynamicReportDialog').show()" />
+                        <p:commandButton icon="fa fa-paw" value="Borrador" styleClass="PurpleButton White" actionListener="#{containerView.selectedView.newScratch}" update="contentForm newDynamicReportDialogForm"  />
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:outputPanel rendered="#{isReportSelected}">
+                            <div class="Container100">
+                                <div class="DispInlBlock MarRight10">
+                                    <span class="FontAdamantiumBold Fs10 DispBlock Blue">Nombre del Reporte</span>
+                                    <span class="FontAdamantiumBold Fs14 DispBlock Green">#{containerView.selectedView.report.reportName}</span>
+                                </div>
+                                <div class="DispInlBlock">
+                                    <span class="ui-separator">
+                                        <span class="fa fa-ellipsis-v SoftGray"></span>
+                                    </span>
+                                </div>
+                                <h:panelGroup rendered="#{displayReportType!=null and displayReportType}">
+                                    <div class="DispInlBlock MarRight10">
+                                        <span class="FontAdamantiumBold Fs10 DispBlock Blue">Tipo del Reporte</span>
+                                        <span class="FontAdamantiumBold Fs10 DispBlock Green">#{containerView.selectedView.report.dynReportType.description}</span>
+                                    </div>
+                                </h:panelGroup>
+                                <div class="DispInlBlock MarRight10">
+                                    <span class="FontAdamantiumBold Fs10 DispBlock Blue">Creado en</span>
+                                    <span class="FontAdamantiumBold Fs10 DispBlock Green">
+                                        <h:outputText id="dcreationDate" value="#{containerView.selectedView.report.creationDate}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                                        </h:outputText>
+                                    </span>
+                                </div>
+                                <div class="DispInlBlock MarRight10">
+                                    <span class="FontAdamantiumBold Fs10 DispBlock Blue">Modificado en</span>
+                                    <span class="FontAdamantiumBold Fs10 DispBlock Green">
+                                        <h:outputText id="dupdateDateNunca" value="Nunca" rendered="#{containerView.selectedView.report.updateDate==null}" />
+                                        <h:outputText id="dupdateDate" value="#{containerView.selectedView.report.updateDate}" rendered="#{containerView.selectedView.report.updateDate!=null}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                                        </h:outputText>
+                                    </span>
+                                </div>
+                                <div class="DispInlBlock MarRight10">
+                                    <span class="ui-separator">
+                                        <span class="fa fa-ellipsis-v SoftGray"></span>
+                                    </span>
+                                    <p:commandButton styleClass="LeadenGreenBack White" title="Guardar" icon="fa fa-save" actionListener="#{containerView.selectedView.save}" oncomplete="handleSubmit(xhr,status,args,'newDynamicReportDialog');" process="contentForm" update="contentForm newDynamicReportDialogForm"  />
+                                    <p:commandButton id="reloadDynReportButton" styleClass="SoftRedBack White" title="Recargar Reporte - Deshacer cambios" icon="fa fa-undo" actionListener="#{containerView.selectedView.reload}" update="contentForm" rendered="#{not(isScratch)}" />
+                                    <span class="ui-separator">
+                                        <span class="fa fa-ellipsis-v SoftGray"></span>
+                                    </span>
+                                    <p:commandButton styleClass="RedButton White" title="Eliminar Reporte" icon="fa fa-trash" oncomplete="PF('deleteDynamicReportDialog').show()" process="contentForm" update="deleteDynamicReportDialogForm" rendered="#{not(isScratch)}" />
+                                    <span class="ui-separator">
+                                        <span class="fa fa-ellipsis-v SoftGray"></span>
+                                    </span>
+                                    <p:commandButton styleClass="OrangeButton White" title="Cerrar" icon="fa fa-chevron-left" actionListener="#{containerView.selectedView.cancelSelection}" update="contentForm" />
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </f:facet>
+                </p:toolbar>
+            </p:outputPanel>
+            <p:sticky margin="81" target="toolbar_section" />
+
+            <p:outputPanel id="content_by_dynreport" rendered="#{isReportSelected}">
+                <ui:insert name="beforeCriteriaContent" />
+
+                <sitep:card id="cardCriteria" title="Definici&#243;n de Criterios para los Par&#225;metros" width="#{widthCriteria}">
+                    <p:dataTable id="selectedParams" value="#{containerView.selectedView.selectedParameters}" 
+                                 var="item" sortBy="#{item.orderIndex}" 
+                                 widgetVar="cellParams" rowStyleClass="#{item.required!=null and item.required? 'required': ''}">
+
+
+                        <p:column headerText="Par&#225;metros">
+                            <h:outputText escape="false" value="#{item.fieldTitle}#{item.required!=null and item.required?' (Obligatorio)':''}" rendered="#{customParameterSection==null}" />
+                            <p:outputPanel rendered="#{customParameterSection!=null and customParameterSection}">
+                                <ui:insert name="parameterFieldDefinition" />
+                            </p:outputPanel>
+                        </p:column>
+
+                        <p:column headerText="Operador">
+                            <p:selectOneMenu value="#{item.selectedOperation}" style="width: 200px;" rendered="#{customParameterSection==null}">
+                                <f:selectItems value="#{item.dynOperatorByParameterSet}" 
+                                               var="op" itemLabel="#{op.operationType.description}" 
+                                               itemValue="#{op.operationType}" />
+                            </p:selectOneMenu>
+                            <p:outputPanel rendered="#{customParameterSection!=null and customParameterSection}">
+                                <ui:insert name="parameterOperatorDefinition" />
+                            </p:outputPanel>
+                        </p:column>
+
+                        <p:column headerText="Valor">
+                            <p:inputText value="#{item.value}" rendered="#{customParameterSection==null}" />
+                            <p:outputPanel rendered="#{customParameterSection!=null and customParameterSection}">
+                                <ui:insert name="parameterValueDefinition" />
+                            </p:outputPanel>
+                        </p:column>
+
+                    </p:dataTable>
+                </sitep:card>
+
+                <sitep:card id="cardParams" title="Selecci&#243;n de Par&#225;metros" width="#{widthParams}" responsiveClass="Responsive100">
+                    <p:dataTable id="availableParams" value="#{containerView.selectedView.report.dynParameterSet}" 
+                                 var="item" 
+                                 selection="#{containerView.selectedView.selectedParameters}" 
+                                 rowKey="#{item.id}" rowStyleClass="#{item.required!=null and item.required and (item.selected==null or not(item.selected))? 'required': ''}"
+                                 disabledSelection="#{item.enabled!=null and not item.enabled}">
+                        <p:ajax event="rowSelect" listener="#{containerView.selectedView.onSelectParameter}" process="contentForm" update="contentForm" />
+                        <p:ajax event="rowUnselect" listener="#{containerView.selectedView.onUnselectParameter}" process="contentForm" update="contentForm" />
+                        <p:ajax event="toggleSelect" listener="#{containerView.selectedView.onToggleSelectParameter}" process="contentForm" update="contentForm" />
+                        <p:ajax event="rowSelectCheckbox" listener="#{containerView.selectedView.onSelectParameter}" process="contentForm" update="contentForm" />
+                        <p:ajax event="rowUnselectCheckbox" listener="#{containerView.selectedView.onUnselectParameter}" process="contentForm" update="contentForm" />
+                        <p:column headerText="Acci&#243;n" selectionMode="multiple" width="40" style="text-align: center; vertical-align: middle;" />
+                        <p:column headerText="Par&#225;metros">
+                            <h:outputText escape="false" value="#{item.fieldTitle}#{item.required!=null and item.required?' (Obligatorio)':''}" />
+                        </p:column>
+                    </p:dataTable>
+                </sitep:card>
+
+                <sitep:card id="cardStages" title="Selecci&#243;n de Etapas" width="#{widthStages}" responsiveClass="Responsive100" rendered="#{containerView.selectedView.report.dynStagesByReportSet!=null and containerView.selectedView.report.dynStagesByReportSet.size()>0}">
+                    <p:dataTable id="availableStages" value="#{containerView.selectedView.report.dynStagesByReportSet}" 
+                                 var="item" 
+                                 selection="#{containerView.selectedView.selectedStages}" 
+                                 rowKey="#{item.id}">
+                        <p:ajax event="rowSelect" listener="#{containerView.selectedView.onSelectStage}" process="contentForm" update="contentForm" />
+                        <p:ajax event="rowUnselect" listener="#{containerView.selectedView.onUnselectStage}" process="contentForm" update="contentForm" />
+                        <p:ajax event="toggleSelect" listener="#{containerView.selectedView.onToggleSelectStage}" process="contentForm" update="contentForm" />
+                        <p:ajax event="rowSelectCheckbox" listener="#{containerView.selectedView.onSelectStage}" process="contentForm" update="contentForm" />
+                        <p:ajax event="rowUnselectCheckbox" listener="#{containerView.selectedView.onUnselectStage}"  process="contentForm" update="contentForm" />
+                        <p:column headerText="Acci&#243;n" selectionMode="multiple" width="40" />
+                        <p:column headerText="Etapa">
+                            <h:outputText escape="false" value="#{item.dynReportStage.description}" />
+                        </p:column>
+                    </p:dataTable>
+                </sitep:card>
+
+                <sitep:card id="cardAdditionalColumns" title="Informaci&#243;n Adicional" width="#{widthAdditionalColumns}" responsiveClass="Responsive100" rendered="#{containerView.selectedView.report.additionalColumnsSet!=null and containerView.selectedView.report.additionalColumnsSet.size()>0}">
+                    <p:dataTable id="availableAdditionalColumns" value="#{containerView.selectedView.report.additionalColumnsSet}" 
+                                 var="item" 
+                                 selection="#{containerView.selectedView.selectedAdditionalColumns}" 
+                                 rowKey="#{item.id}"
+                                 disabledSelection="#{item.enabled!=null and not item.enabled}">
+                        <p:ajax event="rowSelect" listener="#{containerView.selectedView.onSelectAdditCol}" process="contentForm" update="contentForm" />
+                        <p:ajax event="rowUnselect" listener="#{containerView.selectedView.onUnselectAdditCol}" process="contentForm" update="contentForm" />
+                        <p:ajax event="toggleSelect" listener="#{containerView.selectedView.onToggleSelectAdditCol}" process="contentForm" update="contentForm" />
+                        <p:ajax event="rowSelectCheckbox" listener="#{containerView.selectedView.onSelectAdditCol}" process="contentForm" update="contentForm" />
+                        <p:ajax event="rowUnselectCheckbox" listener="#{containerView.selectedView.onUnselectAdditCol}" process="contentForm" update="contentForm" />
+                        <p:column headerText="Acci&#243;n" selectionMode="multiple" width="40" style="text-align: center; vertical-align: middle;" />
+                        <p:column headerText="Par&#225;metros">
+                            <h:outputText escape="false" value="#{item.fieldTitle}" />
+                        </p:column>
+                    </p:dataTable>
+                </sitep:card>
+
+                <ui:insert name="extraContent" />
+
+                <div  class="Container100">
+                    <div  class="ContainerIndent">
+                        <div  class="Card">
+                            <sitep:validDownload label="Generar Informe" validationListener="#{containerView.selectedView.validateReport}" actionListener="#{containerView.selectedView.report}" rendered="#{containerView.selectedView.useDefaultReportButton}"  />
+                            <ui:insert name="reportButtonContent" />
+                        </div>
+                    </div>
+                </div>
+            </p:outputPanel>
+            <p:outputPanel id="no_dyn_report_selected" rendered="#{not(isReportSelected)}">
+                <div  class="Container100 ui-fluid">
+                    <div  class="ContainerIndent">
+                        <div class="Card TexAlCenter">
+                            <br /><br /><br /><br /><br /><br /><br />
+                            <span class="icon-chart Fs100 Blue">&#32;&#32;Reportes Din&#225;micos</span>
+                            <br />
+                            <br />
+                            <br />
+                            <span class="BoldGray Fs30" title="#{containerView.selectedView.type.description}">
+                                <ui:insert name="middleMessage" /> 
+                            </span>
+                            <br />
+                            <br />
+                            <span class="gray Fs20">Seleccione un Reporte Existente o puede Crear uno nuevo</span>
+                            <br /><br /><br /><br /><br /><br /><br />
+                        </div>
+                    </div>
+                </div>
+            </p:outputPanel>
+        </h:form>
+
+        <p:dialog header="Seleccione el Reporte Din&#225;mico" widgetVar="openDynamicReportDialog" modal="true" 
+                  showEffect="fade" resizable="false" hideEffect="fade" responsive="true"
+                  appendTo="@(body)">
+            <h:form id="openDynamicReportDialogForm" prependId="false">
+                <p:dataTable id="dynReportsList" widgetVar="dynReportsList" var="item" 
+                             value="#{containerView.selectedView.lazyModel}" 
+                             paginator="true"   lazy="true" resizableColumns="true" 
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rows="10"
+                             selectionMode="single" 
+                             selection="#{containerView.selectedView.selectedDynReport}" 
+                             sortBy="#{item.reportName}"
+                             rowsPerPageTemplate="5,10,15,20,25,30,35,40,50,100,200,500,1000" style="width: 600px;">
+
+                    <p:ajax event="rowSelect" listener="#{containerView.selectedView.onRowSelect}"  />
+                    <p:ajax event="rowDblselect" listener="#{containerView.selectedView.loadSelected}" onstart="PF('statusDialog').show()" oncomplete="PF('openDynamicReportDialog').hide(); PF('statusDialog').hide()" update="contentForm" global="false" />
+
+                    <p:column headerText="Nombre del Reporte" sortBy="#{item.reportName}" filterBy="#{item.reportName}" style="width:150px">
+                        <h:outputText value="#{item.reportName}" />
+                    </p:column>
+                </p:dataTable>
+                <div class="EmptyBox50"></div>
+                <p:commandButton type="button" icon="fa fa-undo" value="Cancelar" styleClass="Fright RedButton White" onclick="PF('openDynamicReportDialog').hide()" />
+                <p:commandButton icon="fa fa-hand-o-right" value="Seleccionar y Mostrar" styleClass="Fright GreenButton White" onstart="PF('statusDialog').show()" actionListener="#{containerView.selectedView.loadSelected}" oncomplete="handleSubmit(xhr,status,args,'openDynamicReportDialog');" update="contentForm" />
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Ingrese el Nombre del Nuevo Reporte Din&#225;mico" widgetVar="newDynamicReportDialog" modal="true" 
+                  showEffect="fade" resizable="false" hideEffect="fade" responsive="true"
+                  appendTo="@(body)">
+            <p:messages autoUpdate="true" showDetail="true"  />
+            <h:form id="newDynamicReportDialogForm" prependId="false">
+                <p:panelGrid columns="2">
+                    <p:outputLabel for="inputNewReportName" value="Nombre del Reporte" />
+                    <p:inputText id="inputNewReportName" value="#{containerView.selectedView.newReportName}" size="100" style="width: 300px;" />
+                </p:panelGrid>
+
+                <div class="EmptyBox50"></div>
+                <p:commandButton type="button" icon="fa fa-undo" value="Cancelar" styleClass="Fright RedButton White" onclick="PF('newDynamicReportDialog').hide()" />
+                <p:commandButton icon="fa fa-magic" value="Crear el Reporte" styleClass="Fright GreenButton White" onstart="PF('statusDialog').show()" actionListener="#{containerView.selectedView.validateCreate}" oncomplete="handleSubmit(xhr,status,args,'newDynamicReportDialog');" process="@form,contentForm" update="contentForm" />
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Confirme la Eliminaci&#243;n del Reporte" widgetVar="deleteDynamicReportDialog" modal="true" 
+                  showEffect="fade" resizable="false" hideEffect="fade" responsive="true"
+                  appendTo="@(body)" width="600">
+            <p:messages autoUpdate="true" showDetail="true"  />
+
+            <h:form id="deleteDynamicReportDialogForm" prependId="false">
+                <div class="Container100 Responsive100">
+                    <div class="ContainerIndent">
+                        <div class="Card">
+                            <div class="Wid60 TexAlCenter Fleft">
+                                <i class="fa fa-question-circle Orange Fs50 Fleft MarRight10"></i>
+                                <span class="Fs24 Orange FontAdamantiumBold">&#191;Confirma Eliminar este Reporte Din&#225;mico?</span>
+                            </div>
+                            <div class="Wid40 Fright">
+                                <span class="FontAdamantiumBold Fs12 DispBlock MarBot10 Blue">Nombre del Reporte</span>
+                                <span class="FontAdamantiumBold Fs16 DispBlock Green">#{containerView.selectedView.report.reportName}</span>
+                                <div class="EmptyBox20"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="EmptyBox30"></div>
+                <p:commandButton type="button" icon="fa fa-undo" value="Cancelar" styleClass="Fright RedButton White" onclick="PF('deleteDynamicReportDialog').hide()" />
+                <p:commandButton icon="fa fa-trash-o" value="Eliminar el Reporte" styleClass="Fright GreenButton White" onstart="PF('statusDialog').show()" actionListener="#{containerView.selectedView.delete}" oncomplete="handleSubmit(xhr,status,args,'deleteDynamicReportDialog');" update="contentForm" />
+            </h:form>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>
+

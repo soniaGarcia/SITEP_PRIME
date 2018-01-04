@@ -1,0 +1,14 @@
+.criteria_grid{ width: 100%;}
+.criteria_field{ width:20%; text-align: center; }
+.criteria_operator{ width:20%; text-align: center;}
+.criteria_value{ width:20%; text-align: center;}
+.criteria_connector{ width:20%; text-align: center;}
+.criteria_action{ width:20%; text-align: center;}
+.groups_grid { width: 400px;}
+.groups_label { width: 150px;}
+.groups_concept { width: 250px;}
+.report_columns_grid{ width: 400px;}
+.predefined_label{ width: 200px; }
+.predefined_input{ width: 300px; }
+.predefined_button{ width: 150px; }
+table tbody.ui-datatable-data >tr.required>td{ /*background-color: #F5F6CE; border-color: #fff; */ color: crimson;  font-weight: bolder; }
