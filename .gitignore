@@ -22,3 +22,6 @@
 .0*
 *.directory
 /generated-sources/
+/target/*.0-SNAPSHOT.jar
+*.0-SNAPSHOT.jar
+/target/maven-archiver/
