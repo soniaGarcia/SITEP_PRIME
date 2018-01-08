@@ -36,3 +36,6 @@ buildNumber.properties
 /sitepUtil/target/
 /sitepCommon/target/
 /sitepcommon/target/
+/siteputil/target/
+/siteputil/target/maven-archiver/*.properties
+/sitepcommon/target/maven-archiver/*.properties
