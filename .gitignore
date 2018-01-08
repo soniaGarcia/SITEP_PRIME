@@ -25,7 +25,3 @@
 /target/*.0-SNAPSHOT.jar
 *.0-SNAPSHOT.jar
 /target/maven-archiver/
-/SITEP2/target/
-/SITEP2/target
-/sitepUtil/target/
-/sitepCommon/target/
