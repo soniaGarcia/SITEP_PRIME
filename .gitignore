@@ -32,5 +32,7 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 /SITEP2/target/
 /sitep2/target/
+/sitep2/target/maven-status/
 /sitepUtil/target/
 /sitepCommon/target/
+/sitepcommon/target/
