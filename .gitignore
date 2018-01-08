@@ -5,19 +5,12 @@
 *.jar
 *.war
 *.ear
-*.DS_Store
-*.classpath
-*.project
-*.settings
-*.tern-project
-*.metadata
-.metadata/
-.metadata
-/metadata/
-*.target
-.target/
-.target
-/target/
+*.zip
+*.tar.gz
+*.rar
+### Java-Web ###
+## ignoring target file
+target/
 *.log
 .0*
 *.directory
@@ -25,3 +18,19 @@
 /target/*.0-SNAPSHOT.jar
 *.0-SNAPSHOT.jar
 /target/maven-archiver/
+### Maven ###
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
+!/.mvn/wrapper/maven-wrapper.jar
+/SITEP2/target/
+/sitep2/target/
+/sitepUtil/target/
+/sitepCommon/target/
